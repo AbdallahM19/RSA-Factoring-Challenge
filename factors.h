@@ -1,15 +1,7 @@
-// factors.h
-#ifndef FACTORS_H
-#define FACTORS_H
+#ifndef FARTORS_H
+#define FARTORS_H
 
-typedef struct {
-    long long int n;
-    long long int p;
-    long long int q;
-} Factorization;
+void factorize(char *buffer);
 
-int is_prime(long long int num);
-Factorization factorize(long long int n);
-
-#endif // FACTORS_H
+#endif /* FARTORS_H */
 
