@@ -1,9 +1,6 @@
+// factors.h
 #ifndef FACTORS_H
 #define FACTORS_H
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
 typedef struct {
     long long int n;

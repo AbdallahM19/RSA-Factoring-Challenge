@@ -1,3 +1,5 @@
+// factorize.c
+#include <math.h>
 #include "factors.h"
 
 int is_prime(long long int num) {

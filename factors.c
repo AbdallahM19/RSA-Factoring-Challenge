@@ -1,3 +1,6 @@
+// factors.c
+#include <stdio.h>
+#include <stdlib.h>
 #include "factors.h"
 
 int main(int argc, char *argv[]) {
@@ -24,3 +27,4 @@ int main(int argc, char *argv[]) {
     fclose(file);
     return 0;
 }
+
