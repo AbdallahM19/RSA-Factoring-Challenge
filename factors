@@ -1,33 +1,31 @@
 #!/usr/bin/python3
-
-# library to get arguments
-import sys
+from sys import argv
 
 
-# fn unpack number factorial
-def fc():
-    """
-    function fc to search file to convert number and format n=p*q
-    """
-    try:
-        revfile = sys.argv[1]
-        with open(revfile) as f:
-            for revnumber in f:
-                revnumber = int(revnumber)
-                if revnumber % 2 == 0:
-                        print("{}={}*{}".format(revnumber, revnumber // 2, 2))
-                        continue
-                i = 3
-                while i < revnumber // 2:
-                    if revnumber % i == 0:
-                        print("{}={}*{}".format(revnumber, revnumber // i, i))
-                        break
-                    i = i + 2
-                if i == (revnumber // 2) + 1:
-                    print("{}={}*{}".format(revnumber, revnumber, 1))
-    except (IndexError):
-        pass
+def factorize(value):
+    """"print a simple descomposition of an integer > 1"""
+    i = 2
 
+    if value < 2:
+        return
+    print()
+    print(value, "<- value-bef")
+    while value % i:
+        i += 1
+    print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
+    print(value, "<- value-aft")
+    print()
 
-# autostart
-fc()
+if len(argv) != 2:
+    exit()
+
+try:
+    with open(argv[1]) as file:
+        line = file.readline()
+
+        while line != "":
+            value = int(line.split('\n')[0])
+            factorize(value)
+            line = file.readline()
+except:
+    pass
