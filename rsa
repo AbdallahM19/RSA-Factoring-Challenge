@@ -1,53 +1,58 @@
-#!/usr/bin/python3
-"""
-Factorize numbers in a file into a product of two prime numbers
-"""
-import sys
+#!/usr/bin/env python3
+""" RSA Factoring Challenge """
+
+from sys import argv
+from math import isqrt
 
 
-def factorize(num):
-    """
-    Factorize the given number into two prime numbers (format n = p*q)
-    """
-    for i in range(2, num + 1):
-        if num % i == 0 and is_prime(i):
-            factor_1 = i
-            factor_2 = num // i
-            return factor_1, factor_2
+def open_read_file(file_name):
+    """ Read from file and add to array """
+    with open(file_name, "r", encoding="utf-8") as file:
+        lines = file.readlines()
+    numbers_to_factor = [int(line) for line in lines]
+    return numbers_to_factor
 
 
 def is_prime(num):
-    """
-    Check if a number is prime
-    """
+    """ Check if a number is prime """
     if num < 2:
         return False
-    for i in range(2, int(num**0.5) + 1):
+    for i in range(2, isqrt(num) + 1):
         if num % i == 0:
             return False
     return True
 
 
-def main():
-    """
-    Main function to read numbers from a file and factorize each one
-    """
-    try:
-        file = sys.argv[1]
-        with open(file) as f:
-            for line_number in f:
-                try:
-                    line_number = int(line_number)
-                    factors = factorize(line_number)
-                    if factors:
-                        factor_1, factor_2 = factors
-                        print("{}={}*{}".format(line_number, factor_2, factor_1))
-                except ValueError:
-                    pass
-    except (IndexError, FileNotFoundError):
-        pass
+def prime_factorize(n):
+    """ Find prime factors of n """
+    factors = []
+    for i in range(2, n + 1):
+        if is_prime(i):
+            while n % i == 0:
+                factors.append(i)
+                n //= i
+    return factors
 
 
-if __name__ == "__main__":
-    main()
+def find_and_times(n):
+    """ Factorize using prime numbers """
+    factors = prime_factorize(n)
+    if len(factors) == 2:
+    	if (factors[1] >= factors[0]):
+    		print("{}={}*{}".format(n, factors[1], factors[0]))
+    	else:
+        	print("{}={}*{}".format(n, factors[0], factors[1]))
+    else:
+        print("Unable to factorize: {}".format(n))
+
+
+def factorize_numbers(numbers):
+    """ Factor each number in the list """
+    for number in numbers:
+        find_and_times(number)
+
+
+if len(argv) == 2:
+    numbers_to_factorize = open_read_file(argv[1])
+    factorize_numbers(numbers_to_factorize)
 
