@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ RSA Factoring Challenge """
 from sys import argv
-from math import isqrt
+from math import sqrt
 
 def open_read_file(file_name):
     """read from file
@@ -14,7 +14,16 @@ def open_read_file(file_name):
         number_to_factor.append(int(line))
     return number_to_factor
 
-def factorize(n):
+def find_and_times(n):
+    """factor each
+    n given
+    """
+    for i in range(1, n):
+        if n == ((n // i) * i):
+            print("{}={}*{}".format(n, (n // i), i))
+            break
+
+def prime_factorize(n):
     """ Prime factorization of n """
     factors = []
     
@@ -22,7 +31,7 @@ def factorize(n):
         factors.append(2)
         n //= 2
 
-    for i in range(3, isqrt(n) + 1, 2):
+    for i in range(3, int(sqrt(n)) + 1, 2):
         while n % i == 0:
             factors.append(i)
             n //= i
@@ -32,13 +41,14 @@ def factorize(n):
 
     return factors
 
-def rsa_factorization(numbers):
-    """ Factorize each number using RSA approach """
-    for num in numbers:
-        factors = factorize(num)
-        p, q = factors[1], factors[0]
-        print(f"{num}={p}*{q}")
+def fac_list(ls):
+    """factor each
+    num in ls
+    """
+    for i in ls:
+        prime_factors = prime_factorize(i)
+        p, q = prime_factors[1], prime_factors[0]
+        print(f"{i}={p}*{q}")
 
 if len(argv) == 2:
-    rsa_factorization(open_read_file(argv[1]))
-
+    fac_list(open_read_file(argv[1]))
