@@ -1,48 +1,32 @@
 #!/usr/bin/python3
-
-import gmpy2
+"""
+Factorize numbers in a file into a product of two prime numbers
+"""
 import sys
 
-def pollards_rho(n):
-    if n % 2 == 0:
-        return 2
 
-    x = gmpy2.random_state(n)
-    y = x
-    c = gmpy2.random_state(n)
+def factor():
+    """
+    A function to search file and factorize the given set of numbers into two prime numbers (format n = p*q)
+    """
+    try:
+        file = sys.argv[1]
+        with open(file) as f:
+            for line_number in f:
+                line_number = int(line_number)
+                if line_number % 2 == 0:
+                        print("{}={}*{}".format(line_number, line_number // 2, 2))
+                        continue
+                i = 3
+                while i < line_number // 2:
+                    if line_number % i == 0:
+                        print("{}={}*{}".format(line_number, line_number // i, i))
+                        break
+                    i = i + 2
+                if i == (line_number // 2) + 1:
+                    print("{}={}*{}".format(line_number, line_number, 1))
+    except (IndexError):
+        pass
 
-    f = lambda x: (x**2 + c) % n
 
-    while True:
-        x = f(x)
-        y = f(f(y))
-
-        d = gmpy2.gcd(abs(x - y), n)
-        if d > 1:
-            return d
-
-def factorize_rsa_number(n):
-    factors = []
-
-    while n > 1:
-        factor = pollards_rho(n)
-        factors.append(int(factor))
-        n //= factor
-
-    return factors
-
-def format_factors(n, factors):
-    return f"{n}={'*'.join(map(str, factors))}"
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python rsa.py <filename>")
-        sys.exit(1)
-
-    with open(sys.argv[1]) as f:
-        rsa_number = int(f.readline().strip())
-
-    factors = factorize_rsa_number(rsa_number)
-    result = format_factors(rsa_number, factors)
-    print(result)
-
+factor()
