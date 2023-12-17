@@ -5,7 +5,21 @@ Factorize numbers in a file into a product of two prime numbers
 import sys
 
 
+def factorize(num):
+    """
+    Factorize the given number into two prime numbers (format n = p*q)
+    """
+    for i in range(2, num + 1):
+        if num % i == 0 and is_prime(i):
+            factor_1 = i
+            factor_2 = num // i
+            return factor_1, factor_2
+
+
 def is_prime(num):
+    """
+    Check if a number is prime
+    """
     if num < 2:
         return False
     for i in range(2, int(num**0.5) + 1):
@@ -14,24 +28,26 @@ def is_prime(num):
     return True
 
 
-def factorize():
+def main():
     """
-    A function to factorize the given set of numbers into two prime numbers (format n = p*q)
+    Main function to read numbers from a file and factorize each one
     """
     try:
         file = sys.argv[1]
         with open(file) as f:
             for line_number in f:
-                line_number = int(line_number)
-                for i in range(2, line_number + 1):
-                    if line_number % i == 0 and is_prime(i):
-                        factor_1 = i
-                        factor_2 = line_number // i
+                try:
+                    line_number = int(line_number)
+                    factors = factorize(line_number)
+                    if factors:
+                        factor_1, factor_2 = factors
                         print("{}={}*{}".format(line_number, factor_2, factor_1))
-                        break
-    except (IndexError, ValueError):
+                except ValueError:
+                    pass
+    except (IndexError, FileNotFoundError):
         pass
 
 
-factorize()
+if __name__ == "__main__":
+    main()
 
