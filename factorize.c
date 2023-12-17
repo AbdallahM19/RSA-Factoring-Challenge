@@ -1,22 +1,29 @@
-// factorize.c
-#include <stdio.h>
-#include <stdlib.h>
-#include "factors.h"
+#include "factor.h"
 
-void factorize(char *buffer) {
-    unsigned long long num = strtoull(buffer, NULL, 10);
+/**
+ * factorize - The function factorize a number
+ * @buffer: pointer to the address of the number
+ *
+ * Author: Thaoban Abdrasheed
+ * Return: int
+ */
+int factorize(char *buffer)
+{
 
-    // Check if conversion to unsigned long long was successful
-    if (num == 0 && buffer[0] != '0') {
-        fprintf(stderr, "Error: Invalid number - %s\n", buffer);
-        return;
-    }
+	u_int32_t num;
+	u_int32_t i;
 
-    unsigned long long i;
-    for (i = 2; i < num; i++) {
-        if (num % i == 0) {
-            printf("%llu=%llu*%llu\n", num, num / i, i);
-            break;
-        }
-    }
+	num = atoi(buffer);
+
+
+	for (i = 2; i < num; i++)
+	{
+		if (num % i == 0)
+		{
+			printf("%d=%d*%d\n",num,num/i,i);
+			break;
+		}
+	}
+
+return (0);
 }
