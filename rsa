@@ -5,28 +5,33 @@ Factorize numbers in a file into a product of two prime numbers
 import sys
 
 
-def factor():
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+
+def factorize():
     """
-    A function to search file and factorize the given set of numbers into two prime numbers (format n = p*q)
+    A function to factorize the given set of numbers into two prime numbers (format n = p*q)
     """
     try:
         file = sys.argv[1]
         with open(file) as f:
             for line_number in f:
                 line_number = int(line_number)
-                if line_number % 2 == 0:
-                        print("{}={}*{}".format(line_number, line_number // 2, 2))
-                        continue
-                i = 3
-                while i < line_number // 2:
-                    if line_number % i == 0:
-                        print("{}={}*{}".format(line_number, line_number // i, i))
+                for i in range(2, line_number + 1):
+                    if line_number % i == 0 and is_prime(i):
+                        factor_1 = i
+                        factor_2 = line_number // i
+                        print("{}={}*{}".format(line_number, factor_2, factor_1))
                         break
-                    i = i + 2
-                if i == (line_number // 2) + 1:
-                    print("{}={}*{}".format(line_number, line_number, 1))
-    except (IndexError):
+    except (IndexError, ValueError):
         pass
 
 
-factor()
+factorize()
+
