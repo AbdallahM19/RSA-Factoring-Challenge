@@ -1,47 +1,51 @@
 #!/usr/bin/env python3
-""" Factor numbers """
+""" Factorize numbers """
 from sys import argv
 from math import sqrt
 
+def factorize(n):
+    """ Factorize a number into two primes """
+    def is_prime(num):
+        if num < 2:
+            return False
+        for i in range(2, int(sqrt(num)) + 1):
+            if num % i == 0:
+                return False
+        return True
 
-def open_read_file(file_name):
-    """read from file
-    add to array
-    """
+    factors = []
+    
+    # Divide by 2
+    while n % 2 == 0:
+        factors.append(2)
+        n //= 2
+
+    # Divide by odd numbers starting from 3
+    for i in range(3, int(sqrt(n)) + 1, 2):
+        while n % i == 0:
+            factors.append(i)
+            n //= i
+
+    # If there's a remaining prime factor greater than 2
+    if n > 2:
+        factors.append(n)
+
+    return factors if len(factors) == 2 and is_prime(factors[0]) and is_prime(factors[1]) else None
+
+def factorize_file(file_name):
+    """ Factorize numbers from a file """
     with open(file_name, "r", encoding="utf-8") as file:
         lines = file.readlines()
-    number_to_factor = []
+
     for line in lines:
-        number_to_factor.append(int(line))
-    return number_to_factor
+        num = int(line.strip())
+        factors = factorize(num)
 
-
-def find_and_times(n):
-    """Factor each n given."""
-    for i in range(2, int(sqrt(n)) + 1):
-        if n % i == 0:
-            j = n // i
-            if is_prime(i) and is_prime(j):
-                print("{}={}*{}".format(n, j, i))
-                break
-
-def is_prime(n):
-    """Check if a number is prime."""
-    if n < 2:
-        return False
-    for i in range(2, int(sqrt(n)) + 1):
-        if n % i == 0:
-            return False
-    return True
-
-
-def fac_list(ls):
-    """factor each
-    num in ls
-    """
-    for i in ls:
-        find_and_times(i)
-
+        if factors:
+            print(f"{num}={factors[1]}*{factors[0]}")
+        else:
+            print(f"{num} cannot be factorized into two primes")
 
 if len(argv) == 2:
-    fac_list(open_read_file(argv[1]))
+    factorize_file(argv[1])
+
