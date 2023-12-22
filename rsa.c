@@ -1,54 +1,78 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
-int is_prime(unsigned long long number) {
-    if (number < 2) {
-        return 0;
+// Function to calculate the greatest common divisor using Euclid's algorithm
+uint64_t gcd(uint64_t a, uint64_t b) {
+    while (b != 0) {
+        uint64_t temp = b;
+        b = a % b;
+        a = temp;
     }
-    unsigned long long i;
-    for (i = 2; i * i <= number; i++) {
-        if (number % i == 0) {
-            return 0;
-        }
-    }
-    return 1;
+    return a;
 }
 
-void factorize_number(unsigned long long number) {
-    unsigned long long i;
-    for (i = 2; i * i <= number; i++) {
-        if (number % i == 0) {
-            if (is_prime(i) && is_prime(number / i)) {
-                printf("%llu=%llu*%llu\n", number, number / i, i);
-                return;
-            }
-        }
+// Function to perform Pollard's rho algorithm for factorization
+uint64_t pollards_rho(uint64_t n) {
+    if (n % 2 == 0) return 2;
+
+    uint64_t x = rand() % (n - 2) + 2;
+    uint64_t y = x;
+    uint64_t d = 1;
+
+    uint64_t f(uint64_t x) {
+        return (x * x + 1) % n;
     }
-    printf("Prime factors not found for %llu\n", number);
+
+    while (d == 1) {
+        x = f(x);
+        y = f(f(y));
+        d = gcd(abs((int64_t)x - (int64_t)y), n);
+    }
+
+    return d;
 }
 
-int main(int argc, char* argv[]) {
+// Function to factorize a number into two prime factors
+void factorize(uint64_t n) {
+    printf("%lu=", n);
+
+    // Factorize using Pollard's rho algorithm
+    while (n > 1) {
+        uint64_t factor = pollards_rho(n);
+        printf("%lu", factor);
+        n /= factor;
+        if (n > 1) {
+            printf("*");
+        }
+    }
+
+    printf("\n");
+}
+
+int main(int argc, char *argv[]) {
+    // Check if the correct number of arguments is provided
     if (argc != 2) {
-        printf("Usage: rsa <file>\n");
+        fprintf(stderr, "Usage: %s <file>\n", argv[0]);
         return 1;
     }
 
-    const char* filename = argv[1];
-    FILE* file = fopen(filename, "r");
+    // Open the file
+    FILE *file = fopen(argv[1], "r");
     if (file == NULL) {
-        printf("Failed to open file '%s'\n", filename);
+        perror("Error opening file");
         return 1;
     }
 
-    unsigned long long number;
-    if (fscanf(file, "%llu", &number) != 1) {
-        printf("Invalid number in the file\n");
-        fclose(file);
-        return 1;
+    // Read the number from the file and factorize it
+    uint64_t num;
+    while (fscanf(file, "%lu", &num) == 1) {
+        factorize(num);
     }
 
+    // Close the file
     fclose(file);
-
-    factorize_number(number);
 
     return 0;
 }
+
