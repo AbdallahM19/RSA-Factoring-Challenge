@@ -1,56 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 
-uint64_t gcd(uint64_t a, uint64_t b);
-uint64_t pollards_rho(uint64_t n);
-void factorize(uint64_t n);
-// Function to calculate the greatest common divisor using Euclid's algorithm
-uint64_t gcd(uint64_t a, uint64_t b) {
-    while (b != 0) {
-        uint64_t temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
-}
+// Function to find and print the prime factorization of a number
+void find_and_times(int n) {
+    printf("%d=", n);
 
-// Function to perform Pollard's rho algorithm for factorization
-uint64_t pollards_rho(uint64_t n) {
-    if (n % 2 == 0) return 2;
-
-    uint64_t x = rand() % (n - 2) + 2;
-    uint64_t y = x;
-    uint64_t d = 1;
-
-    uint64_t f(uint64_t x) {
-        return (x * x + 1) % n;
-    }
-
-    while (d == 1) {
-        x = f(x);
-        y = f(f(y));
-        d = gcd(abs((int64_t)x - (int64_t)y), n);
-    }
-
-    return d;
-}
-
-// Function to factorize a number into two prime factors
-void factorize(uint64_t n) {
-    printf("%lu=", n);
-
-    // Factorize using Pollard's rho algorithm
-    while (n > 1) {
-        uint64_t factor = pollards_rho(n);
-        printf("%lu", factor);
-        n /= factor;
-        if (n > 1) {
-            printf("*");
+    // Find and print the factors
+    for (int i = 2; i <= n; ++i) {
+        while (n % i == 0) {
+            printf("%d", i);
+            n /= i;
+            if (n > 1) {
+                printf("*");
+            }
         }
     }
 
     printf("\n");
+}
+
+// Function to read numbers from a file and factorize them
+void factor_list(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        exit(1);
+    }
+
+    int num;
+    while (fscanf(file, "%d", &num) == 1) {
+        find_and_times(num);
+    }
+
+    fclose(file);
 }
 
 int main(int argc, char *argv[]) {
@@ -60,21 +42,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Open the file
-    FILE *file = fopen(argv[1], "r");
-    if (file == NULL) {
-        perror("Error opening file");
-        return 1;
-    }
-
-    // Read the number from the file and factorize it
-    uint64_t num;
-    while (fscanf(file, "%lu", &num) == 1) {
-        factorize(num);
-    }
-
-    // Close the file
-    fclose(file);
+    factor_list(argv[1]);
 
     return 0;
 }
