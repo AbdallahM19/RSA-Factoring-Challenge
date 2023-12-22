@@ -14,19 +14,16 @@ def factorize(n):
         return True
 
     factors = []
-    
-    # Divide by 2
+
     while n % 2 == 0:
         factors.append(2)
         n //= 2
 
-    # Divide by odd numbers starting from 3
     for i in range(3, int(sqrt(n)) + 1, 2):
         while n % i == 0:
             factors.append(i)
             n //= i
 
-    # If there's a remaining prime factor greater than 2
     if n > 2:
         factors.append(n)
 
