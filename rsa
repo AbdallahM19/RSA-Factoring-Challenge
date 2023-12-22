@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 
-from sympy import factorint
 import sys
 
 def factorize(num):
-    factors = factorint(num)
-    print(f"{num}={'*'.join([f'{k}**{v}' if v > 1 else str(k) for k, v in factors.items()])}")
+    print(f"{num}=", end='')
+
+    # Find and print the factors
+    for i in range(2, num + 1):
+        while num % i == 0:
+            print(i, end='')
+            num //= i
+            if num > 1:
+                print("*", end='')
+
+    print()
 
 def factor_list(filename):
     with open(filename, "r", encoding="utf-8") as file:
