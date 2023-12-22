@@ -18,7 +18,7 @@ void factorize_number(unsigned long long number) {
     for (i = 2; i * i <= number; i++) {
         if (number % i == 0) {
             if (is_prime(i) && is_prime(number / i)) {
-                printf("%llu=%llu*%llu\n", number, i, number / i);
+                printf("%llu=%llu*%llu\n", number, number / i, i);
                 return;
             }
         }
