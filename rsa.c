@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+uint64_t gcd(uint64_t a, uint64_t b);
+uint64_t pollards_rho(uint64_t n);
+void factorize(uint64_t n);
 // Function to calculate the greatest common divisor using Euclid's algorithm
 uint64_t gcd(uint64_t a, uint64_t b) {
     while (b != 0) {
