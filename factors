@@ -3,6 +3,10 @@
 from sys import argv
 from math import sqrt
 
+if len(argv) == 2:
+	factor_list(open_read_file(argv[1]))
+
+
 def open_read_file(file_name):
 	with open(file_name, "r", encoding="utf-8") as file:
 		lines = file.readlines()
@@ -18,7 +22,3 @@ def factor_list(ls):
 			if i == ((i // k) * k):
 				print("{}={}*{}".format(i, (i // k), k))
 				break
-
-
-if len(argv) == 2:
-	factor_list(open_read_file(argv[1]))
