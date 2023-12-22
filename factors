@@ -12,16 +12,12 @@ def open_read_file(file_name):
 	return number_to_factor
 
 
-def find_and_times(n):
-	for i in range(1, n):
-		if n == ((n // i) * i):
-			print("{}={}*{}".format(n, (n // i), i))
-			break
-
-
 def factor_list(ls):
 	for i in ls:
-		find_and_times(i)
+		for k in range(1, i):
+			if i == ((i // k) * k):
+				print("{}={}*{}".format(i, (i // k), k))
+				break
 
 
 if len(argv) == 2:
