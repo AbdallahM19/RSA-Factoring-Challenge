@@ -1,49 +1,32 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "factors.h"
 
-// Function to find and print the prime factorization of a number
-void find_and_times(int n) {
-    printf("%d=", n);
+/**
+ * main - main function
+ *
+ * Return: void
+ */
+int main(int argc, char *argv[])
+{
+	FILE *fptr;
+	size_t count;
+	ssize_t line;
+	char *buffer = NULL;
 
-    // Find and print the factors
-    for (int i = 2; i <= n; ++i) {
-        while (n % i == 0) {
-            printf("%d", i);
-            n /= i;
-            if (n > 1) {
-                printf("*");
-            }
-        }
-    }
 
-    printf("\n");
+	if (argc != 2)
+	{
+		fprintf(stderr, "Usage: factor <filename>\n");
+		exit(EXIT_FAILURE);
+	}
+	fptr = fopen(argv[1], "r");
+	if (fptr == NULL)
+	{
+		fprintf(stderr, "Error: can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
+	while((line = getline(&buffer, &count, fptr)) != -1)
+	{
+		factorizes(buffer);
+	}
+	return (0);
 }
-
-// Function to read numbers from a file and factorize them
-void factor_list(const char *filename) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        perror("Error opening file");
-        exit(1);
-    }
-
-    int num;
-    while (fscanf(file, "%d", &num) == 1) {
-        find_and_times(num);
-    }
-
-    fclose(file);
-}
-
-int main(int argc, char *argv[]) {
-    // Check if the correct number of arguments is provided
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <file>\n", argv[0]);
-        return 1;
-    }
-
-    factor_list(argv[1]);
-
-    return 0;
-}
-
