@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import sys
 from sys import argv
 from math import sqrt
@@ -14,17 +13,14 @@ def open_read_file(file_name):
 	return number_to_factor
 
 
-def factor_list(ls):
-	for i in ls:
-		for k in range(1, i):
-			if i == ((i // k) * k):
-				print("{}={}*{}".format(i, (i // k), k))
-				break
-
-
 if __name__ == "__main__":
 	if len(sys.argv) != 2:
 		print("Usage: {} <file>".format(sys.argv[0]))
 		sys.exit(1)
 
-	factor_list(open_read_file(argv[1]))
+	ls = (open_read_file(argv[1]))
+	for i in ls:
+		for k in range(1, i):
+			if i == ((i // k) * k):
+				print("{}={}*{}".format(i, (i // k), k))
+				break
