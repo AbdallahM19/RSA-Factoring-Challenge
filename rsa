@@ -41,5 +41,5 @@ if __name__ == "__main__":
 			if factors:
 				print("{}={}*{}".format(num, factors[1], factors[0]))
 			else:
-				print("{num} cannot be factorized into two primes".format(num))
+				print("{} cannot be factorized into two primes".format(num))
 
