@@ -1,41 +1,48 @@
-#!/usr/bin/env python3
+#!/usr/bin/env bash
+#is a challenge
+check_factor()
+{
+	if [ $# -ne 3 ];
+        then
+                args=("$@")
+                count=0
+                num2=1
+                for a in ${args[*]};
+                do
+                        if [ $count -gt 1 ];
+                        then
+                                num2=$(echo $a*$num2 | bc)
+                        fi
+                        count=$((count + 1))
+                done
+        else
+                num2=$3
+        fi
 
-from sys import argv
-from math import sqrt
+        num1=$2
+        num=$(echo "$1" | tr ':' '=')
 
-def is_prime(num):
-	if num < 2:
-		return False
-	for i in range(2, int(sqrt(num)) + 1):
-		if num % i == 0:
-			return False
-	return True
+        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
+	        if ((result == 1)); then
+		        numcp=$num1
+		        num1=$num2
+		        num2=$numcp
+                fi
 
-def factorize(n):
-	factors = []
-	while n % 2 == 0:
-		factors.append(2)
-		n //= 2
-	for i in range(3, int(sqrt(n)) + 1, 2):
-		while n % i == 0:
-			factors.append(i)
-			n //= i
-	if n > 2:
-		factors.append(n)
-	return factors if len(factors) == 2 and is_prime(factors[0]) and is_prime(factors[1]) else None
+        echo "$num$num1*$num2"
+}
 
-if __name__ == "__main__":
-	if len(argv) == 2:
-		file_name = argv[1]
-		with open(file_name, "r", encoding="utf-8") as file:
-			lines = file.readlines()
+if [ $# -ne 1 ]
+then
+        echo 'Usage: rsa <file>'
+        exit 1
+else
 
-		for line in lines:
-			num = int(line.strip())
-			factors = factorize(num)
+        while read i
+        do
 
-			if factors:
-				print("{}={}*{}".format(num, factors[1], factors[0]))
-			else:
-				print("{} cannot be factorized into two primes".format(num))
+                result=$(factor "$i")
+                check_factor $result
 
+        done < "$1"
+fi
